@@ -1,3 +1,5 @@
+package br.com.fiap.fornecedor;
+
 public class Fornecedor {
     private String nome;
     private long cnpj;

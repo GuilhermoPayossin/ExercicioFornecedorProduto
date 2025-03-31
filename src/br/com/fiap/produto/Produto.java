@@ -1,4 +1,12 @@
+package br.com.fiap.produto;
+
+import br.com.fiap.fornecedor.Fornecedor;
+
+import java.util.Scanner;
+
 public class Produto {
+    private Scanner sc = new Scanner(System.in);
+
     private String nome;
     private double valor;
     private int qtdEstoque;
