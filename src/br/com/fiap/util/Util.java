@@ -36,12 +36,20 @@ public class Util {
                     pesquisarProduto();
                     break;
                 case 3:
-                    pesquisarFornecedor();
+                    pesquisar();
                     break;
                 default:
                     showMessageDialog(null, "Opção inválida");
                     break;
             }
+        }
+    }
+
+    private void pesquisar() {
+        Fornecedor fornecedor = pesquisarFornecedor();
+        if (fornecedor != null) {
+            showMessageDialog(null, "CNPJ:" + fornecedor.getCnpj() +
+                    "\nNome: " + fornecedor.getNome());
         }
     }
 
@@ -51,25 +59,37 @@ public class Util {
         double valorUnitario;
         Fornecedor fornecedor = pesquisarFornecedor();
         if (fornecedor == null) {
-            cadastrarFornecedor();
-            return;
+            fornecedor = cadastrarFornecedor();
         }
+        nome = showInputDialog("Nome do produto");
+        qtdEstoque = parseInt(showInputDialog("Quantidade em estoque"));
+        valorUnitario = parseDouble(showInputDialog("Valor do produto"));
+        produtos[indexProduto] = new Produto(nome, valorUnitario, qtdEstoque, fornecedor);
+        indexProduto++;
     }
 
-    private void cadastrarFornecedor() {
-        if (indexFornecedor < fornecedor.length) {
-            long cnpj = parseLong(showInputDialog("Digite o CNPJ do Fornecedor"));
-            String nome = showInputDialog("Digite o nome do Fornecedor");
-            fornecedor[indexFornecedor] = new Fornecedor(nome, cnpj);
-            indexFornecedor++;
-        } else {
-            showMessageDialog(null,
-                    "Número máximo de Fornecedores adicionados");
-        }
+    private Fornecedor cadastrarFornecedor() {
+        long cnpj = parseLong(showInputDialog("Digite o CNPJ do Fornecedor"));
+        String nome = showInputDialog("Digite o nome do Fornecedor");
+        fornecedor[indexFornecedor] = new Fornecedor(nome, cnpj);
+        indexFornecedor++;
+        return fornecedor[indexFornecedor - 1];
     }
 
     private void pesquisarProduto() {
-
+        String aux = "Produto não encontrado!";
+        String nome = showInputDialog("Digite um nome para pesquisar");
+        for (int i = 0; i < indexProduto; i++) {
+            if (produtos[i].getNome().equalsIgnoreCase(nome)) {
+                aux = "";
+                aux += "Nome: " + nome + "\n";
+                aux += "Valor: R$" + produtos[i].getValor() + "\n";
+                aux += "Quantidade: " + produtos[i].getQtdEstoque() + "\n";
+                aux += "Fornecedor: " + produtos[i].getFornecedor().getNome() + "\n";
+                break;
+            }
+        }
+        showMessageDialog(null, aux);
     }
 
     private Fornecedor pesquisarFornecedor() {
